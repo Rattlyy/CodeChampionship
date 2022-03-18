@@ -19,7 +19,7 @@ import it.rattly.legale.Constants;
 import it.rattly.legale.data.entity.User;
 import it.rattly.legale.security.AuthenticatedUser;
 import it.rattly.legale.utils.Utils;
-import it.rattly.legale.views.helloworld.HelloWorldView;
+import it.rattly.legale.views.main.MainView;
 
 import java.util.Optional;
 
@@ -119,7 +119,7 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo(Constants.NOME, "la la-globe", HelloWorldView.class), //
+                new MenuItemInfo(Constants.NOME, "la la-globe", MainView.class), //
         };
     }
 
