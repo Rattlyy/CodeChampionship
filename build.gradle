@@ -1,42 +1,56 @@
 buildscript {
     repositories {
         maven { setUrl("https://maven.vaadin.com/vaadin-prereleases") }
-        maven { url "https://plugins.gradle.org/m2/" }
     }
 }
-
 plugins {
-    id 'war'
-    id 'org.gretty' version '3.0.6'
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
     id 'com.vaadin'
 }
 
-defaultTasks("build")
+defaultTasks("clean", "build")
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    maven { setUrl("https://maven.vaadin.com/vaadin-addons") }
 }
 
-gretty {
-    contextPath = "/"
-    servletContainer = "jetty9.4"
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    implementation 'com.vaadin:vaadin-spring-boot-starter:23.0.0'
+    implementation 'org.springframework.data:spring-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.projectlombok:lombok:1.18.22'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'org.hibernate:hibernate-core:5.6.5.Final'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
 }
 
 // The following pnpmEnable = true is not needed as pnpm is used by default,
 // this is just an example of how to configure the Gradle Vaadin Plugin:
-// for more configuraion options please see: https://vaadin.com/docs/latest/guide/start/gradle/#all-options
+// for more configuration options please see: https://vaadin.com/docs/latest/guide/start/gradle/#all-options
 vaadin {
     pnpmEnable = true
-}
-
-dependencies {
-    implementation enforcedPlatform("com.vaadin:vaadin-bom:$vaadinVersion")
-
-    // Vaadin
-    implementation("com.vaadin:vaadin-core")
-    providedCompile "javax.servlet:javax.servlet-api:3.1.0"
-
-    // logging
-    // currently we are logging through the SLF4J API to SLF4J-Simple. See src/main/resources/simplelogger.properties file for the logger configuration
-    implementation "org.slf4j:slf4j-simple:1.7.30"
 }
